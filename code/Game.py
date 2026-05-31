@@ -10,10 +10,6 @@ class Game:
 
     def run(self):
 
-        pg.mixer_music.load("asset/fase1.mp3")
-        pg.mixer_music.play(-1)  # Loop the music
-        pg.mixer_music.set_volume(0.1)  # Set the volume (0.0 to 1.0)
-
         while True:
 
             menu = Menu(self.window)
