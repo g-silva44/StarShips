@@ -1,4 +1,5 @@
 import sys
+
 import pygame as pg
 
 from code.Const import COLOR_ORANGE, MENU_OPTION
@@ -13,6 +14,7 @@ class Menu:
         self.clock = pg.time.Clock()
 
     def run(self):
+        menu_option = 0
         # Initialize mixer if needed and safely start music
         try:
             if not pg.mixer.get_init():
@@ -29,6 +31,7 @@ class Menu:
 
         running = True
         while running:
+
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     try:
@@ -37,17 +40,23 @@ class Menu:
                         pass
                     pg.quit()
                     sys.exit()
-                elif event.type == pg.KEYDOWN:
-                    # Quit on ESC, otherwise close menu
-                    if event.key == pg.K_ESCAPE:
-                        try:
-                            pg.mixer.music.stop()
-                        except Exception:
-                            pass
-                        pg.quit()
-                        sys.exit()
-                    else:
-                        running = False
+
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_DOWN:
+                        if menu_option < len(MENU_OPTION) - 1:
+                            menu_option += 1
+                        else:
+                            menu_option = 0
+
+                    if event.key == pg.K_UP:
+                        if menu_option > 0:
+                            menu_option -= 1
+                        else:
+                            menu_option = len(MENU_OPTION) - 1
+
+                    if event.key == pg.K_RETURN: #ENTER
+                        return MENU_OPTION[menu_option]
+
 
             # Draw background first, then text
             bg = pg.transform.scale(self.surf, self.window.get_size())
@@ -56,7 +65,10 @@ class Menu:
             self.menu_text("Shooter", 48, COLOR_ORANGE, (self.rect.centerx, self.rect.centery - 70))
             
             for i in range(len(MENU_OPTION)):
-                self.menu_text(MENU_OPTION[i], 20, COLOR_WHITE, (self.rect.centerx, self.rect.centery + i * 25))
+                if i == menu_option:
+                    self.menu_text(MENU_OPTION[i], 20, COLOR_ORANGE, (self.rect.centerx, self.rect.centery + i * 25))
+                else:
+                    self.menu_text(MENU_OPTION[i], 20, COLOR_WHITE, (self.rect.centerx, self.rect.centery + i * 25))
 
             pg.display.flip()
             self.clock.tick(60)  # Limit to 60 FPS
