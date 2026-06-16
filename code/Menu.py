@@ -9,7 +9,7 @@ from code.Const import COLOR_WHITE
 class Menu:
     def __init__(self, window):
         self.window = window
-        self.surf = pg.image.load("asset/bg.png").convert()
+        self.surf = pg.image.load("asset/bg.png").convert_alpha()
         self.rect = self.window.get_rect()
         self.clock = pg.time.Clock()
 
